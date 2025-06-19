@@ -7,11 +7,15 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 
 public class Program
 {
+    public const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
     public static void Main(string[] args)
     {
         try
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Configuration
+                .AddUserSecrets<Program>(true)
+                .Build();
             builder.Services.AddDbContext<MyDbContext>(opt =>
                 opt.UseNpgsql(
                     builder.Configuration.GetConnectionString("MyVillageDb")
@@ -23,7 +27,16 @@ public class Program
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
-
+            builder.Services.AddCors(options => {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    policy => {
+                        policy
+                            .WithOrigins("http://localhost:5173")
+                            //.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -33,7 +46,7 @@ public class Program
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthorization();
 
             app.MapControllers();
