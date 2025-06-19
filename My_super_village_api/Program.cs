@@ -24,6 +24,12 @@ public class Program
             // Add services to the container.
             builder.Services.AddTransient<IUsersDataAccess, UsersDataAccess>();
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IUserRessourceDataAccess, UserRessourceDataAccess>();
+            builder.Services.AddTransient<IUserRessourceService, UserRessourceService>();
+            builder.Services.AddTransient<IUserBuildingDataAccess, UserBuildingDataAccess>();
+            builder.Services.AddTransient<IUserBuildingService, UserBuildingService>();
+            
+            //Add Controllers to the container.
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
