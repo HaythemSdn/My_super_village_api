@@ -7,9 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Dao\" />
-      <Folder Include="Dto\" />
-      <Folder Include="Request\" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.5" />
     </ItemGroup>
 
 </Project>
