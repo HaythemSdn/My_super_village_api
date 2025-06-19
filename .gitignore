@@ -9,7 +9,8 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-
+#migration
+DataAccess/Migrations
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

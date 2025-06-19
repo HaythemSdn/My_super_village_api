@@ -21,6 +21,45 @@ namespace DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Common.Dao.UserBuildingDAO", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer")
+                        .HasColumnName("level");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
+                    b.Property<int>("UpgradeCostBois")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UpgradeCostFer")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UpgradeCostPierre")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserBuildings", (string)null);
+                });
+
             modelBuilder.Entity("Common.Dao.UserDAO", b =>
                 {
                     b.Property<Guid>("Id")
@@ -37,7 +76,63 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Common.Dao.UserResourceDAO", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserResources", (string)null);
+                });
+
+            modelBuilder.Entity("Common.Dao.UserBuildingDAO", b =>
+                {
+                    b.HasOne("Common.Dao.UserDAO", "User")
+                        .WithMany("Buildings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Common.Dao.UserResourceDAO", b =>
+                {
+                    b.HasOne("Common.Dao.UserDAO", "User")
+                        .WithMany("Resources")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Common.Dao.UserDAO", b =>
+                {
+                    b.Navigation("Buildings");
+
+                    b.Navigation("Resources");
                 });
 #pragma warning restore 612, 618
         }
