@@ -1,6 +1,7 @@
 using Business.Exceptions;
 using Business.Interfaces;
 using Common.Dao;
+using Common.Dto;
 using Common.Enums;
 using Common.Request;
 using Microsoft.Extensions.Logging;
@@ -31,6 +32,17 @@ public class UserService:IUserService
             _logger.LogError(ex, "Erreur lors de la creation du jeu");
             throw;
         }
+    }
+    public async Task<List<UserDTO>> GetAllUsers()
+    {
+        var users = await _userDataAccess.GetAllUsers();
+        return users.Select(u => u.ToDto()).ToList();
+    }
+
+    public async Task<UserDTO?> GetUserById(Guid id)
+    {
+        var user = await _userDataAccess.GetUserById(id);
+        return user?.ToDto();
     }
     private static void CheckPseudoBusinessRules(string Pseudo) {
         if (string.IsNullOrWhiteSpace(Pseudo)) {
