@@ -1,5 +1,6 @@
 using Business.Exceptions;
 using Business.Interfaces;
+using Common.Dto;
 using Common.Request;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,5 +26,23 @@ public class UsersController : ControllerBase
         } catch (BusinessRuleException e) {
             return BadRequest(e.Message);
         }
+    }
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<UserDTO>>> GetAllUsers()
+    {
+        var users = await _usersService.GetAllUsers();
+        return Ok(users);
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UserDTO>> GetUserById(Guid id)
+    {
+        var user = await _usersService.GetUserById(id);
+        if (user == null)
+            return NotFound();
+        return Ok(user);
     }
 }

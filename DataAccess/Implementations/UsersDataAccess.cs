@@ -1,5 +1,7 @@
 using Common.Dao;
 using DataAccess.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 namespace DataAccess.Implementations;
 
 public class UsersDataAccess :IUsersDataAccess
@@ -13,5 +15,14 @@ public class UsersDataAccess :IUsersDataAccess
     public async Task CreateUser(UserDAO User) {
         _myDbContext.Users.Add(User);
         await _myDbContext.SaveChangesAsync();
+    }
+    public async Task<List<UserDAO>> GetAllUsers()
+    {
+        return await _myDbContext.Users.ToListAsync();
+    }
+
+    public async Task<UserDAO?> GetUserById(Guid id)
+    {
+        return await _myDbContext.Users.FindAsync(id);
     }
 }
