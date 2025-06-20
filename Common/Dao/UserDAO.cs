@@ -7,4 +7,6 @@ public class UserDAO
     
     public ICollection<UserBuildingDAO> Buildings { get; set; } = [];
     public ICollection<UserResourceDAO> Resources { get; set; } = [];
+    
+    public DateTime LastUpdatedAt { get; set; }
 }

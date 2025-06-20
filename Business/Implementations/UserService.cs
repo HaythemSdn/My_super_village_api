@@ -26,7 +26,8 @@ public class UserService:IUserService
                 Id = Guid.NewGuid(),
                 Pseudo = User.Pseudo,
                 Buildings = CreateDefaultBuildings(),
-                Resources = CreateDefaultResources()
+                Resources = CreateDefaultResources(),
+                LastUpdatedAt = DateTime.UtcNow
             });
         } catch (Exception ex) {
             _logger.LogError(ex, "Erreur lors de la creation du jeu");
@@ -51,24 +52,22 @@ public class UserService:IUserService
     }
     private static ICollection<UserBuildingDAO> CreateDefaultBuildings()
     {
-        var now = DateTime.UtcNow;
         return new List<UserBuildingDAO>
         {
-            new() { Id = Guid.NewGuid(), Type = BuildingType.Scierie, Level = 1 ,LastUpdatedAt = now},
-            new() { Id = Guid.NewGuid(), Type = BuildingType.Mine, Level = 1 ,LastUpdatedAt = now},
-            new() { Id = Guid.NewGuid(), Type = BuildingType.Carriere, Level = 1 ,LastUpdatedAt = now},
-            new() { Id = Guid.NewGuid(), Type = BuildingType.Entrepot, Level = 1 ,LastUpdatedAt = now}
+            new() { Id = Guid.NewGuid(), Type = BuildingType.Scierie, Level = 1 },
+            new() { Id = Guid.NewGuid(), Type = BuildingType.Mine, Level = 1 },
+            new() { Id = Guid.NewGuid(), Type = BuildingType.Carriere, Level = 1 },
+            new() { Id = Guid.NewGuid(), Type = BuildingType.Entrepot, Level = 1 }
         };
     }
 
     private static ICollection<UserResourceDAO> CreateDefaultResources()
     {
-        var now = DateTime.UtcNow;
         return new List<UserResourceDAO>
         {
-            new() { Id = Guid.NewGuid(), Type = ResourceType.Bois, Quantity = 100,LastUpdatedAt = now },
-            new() { Id = Guid.NewGuid(), Type = ResourceType.Fer, Quantity = 100 ,LastUpdatedAt = now},
-            new() { Id = Guid.NewGuid(), Type = ResourceType.Pierre, Quantity = 100 ,LastUpdatedAt = now}
+            new() { Id = Guid.NewGuid(), Type = ResourceType.Bois, Quantity = 100 },
+            new() { Id = Guid.NewGuid(), Type = ResourceType.Fer, Quantity = 100 },
+            new() { Id = Guid.NewGuid(), Type = ResourceType.Pierre, Quantity = 100 }
         };
     }
 }
