@@ -21,7 +21,6 @@ public static class UserBuildingsDTOExtensions
         {
             Type = userBuildingDAO.Type.ToString(),
             Level = userBuildingDAO.Level,
-            LastUpdatedAt = userBuildingDAO.LastUpdatedAt,
             UpgradeCostBois = userBuildingDAO.UpgradeCostBois,
             UpgradeCostFer = userBuildingDAO.UpgradeCostFer,
             UpgradeCostPierre = userBuildingDAO.UpgradeCostPierre

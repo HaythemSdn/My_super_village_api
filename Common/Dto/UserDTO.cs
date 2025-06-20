@@ -6,6 +6,7 @@ public class UserDTO
 {
     public Guid Id { get; set; }
     public string Pseudo { get; set; } = null!;
+    public DateTime LastUpdatedAt { get; set; }
 }
 
 public static class UserDTOExtensions
@@ -15,6 +16,7 @@ public static class UserDTOExtensions
         return new UserDTO{
             Id = userDAO.Id,
             Pseudo = userDAO.Pseudo,
+            LastUpdatedAt = userDAO.LastUpdatedAt
         };
     }
     

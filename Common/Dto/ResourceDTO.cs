@@ -7,7 +7,6 @@ public class UserResourceDTO
     public string Type { get; set; } = null!; 
     public int Quantity { get; set; }
     
-    public DateTime LastUpdatedAt { get; set; }
 }
 
 public static class UserResourcesDtoExtensions
@@ -18,7 +17,6 @@ public static class UserResourcesDtoExtensions
         {
             Type = userResourceDAO.Type.ToString(),
             Quantity = userResourceDAO.Quantity, 
-            LastUpdatedAt = userResourceDAO.LastUpdatedAt
         };
     }
 }

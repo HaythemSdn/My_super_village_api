@@ -10,7 +10,7 @@ public class UserBuildingDAO
 
     public BuildingType Type { get; set; }
     public int Level { get; set; }
-    public DateTime LastUpdatedAt { get; set; }
+    
 
     public int UpgradeCostBois { get; set; }
     public int UpgradeCostFer { get; set; }
