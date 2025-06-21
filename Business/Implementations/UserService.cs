@@ -12,11 +12,15 @@ namespace Business.Implementations;
 public class UserService:IUserService
 {
     private readonly IUsersDataAccess _userDataAccess;
+    private readonly IUserBuildingService _buildingService;
+    private readonly IUserRessourceService _ressourceService;
     private readonly ILogger<UserService> _logger;
 
-    public UserService(IUsersDataAccess userDataAccess, ILogger<UserService> logger)
+    public UserService(IUsersDataAccess userDataAccess,IUserBuildingService buildingService,IUserRessourceService ressourceService ,ILogger<UserService> logger )
     {
         _userDataAccess = userDataAccess;
+        _buildingService = buildingService;
+        _ressourceService = ressourceService;
         _logger = logger;
     }
     public async Task CreateUser(CreateUserRequest User) {
@@ -68,6 +72,25 @@ public class UserService:IUserService
             new() { Id = Guid.NewGuid(), Type = ResourceType.Bois, Quantity = 100 },
             new() { Id = Guid.NewGuid(), Type = ResourceType.Fer, Quantity = 100 },
             new() { Id = Guid.NewGuid(), Type = ResourceType.Pierre, Quantity = 100 }
+        };
+    }
+    
+    public async Task<UserWithCollectionsDTO?> LoginWithPseudo(string pseudo)
+    {
+        var user = await _userDataAccess.GetUserByPseudo(pseudo);
+        if (user == null)
+            return null;
+
+        var buildings = await _buildingService.GetBuildingsByUserId(user.Id);
+        var resources = await _ressourceService.GetResourcesByUserId(user.Id);
+
+        return new UserWithCollectionsDTO
+        {
+            Id = user.Id,
+            Pseudo = user.Pseudo,
+            LastUpdatedAt = user.LastUpdatedAt,
+            Buildings = buildings,
+            Resources = resources
         };
     }
 }

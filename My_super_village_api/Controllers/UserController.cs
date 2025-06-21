@@ -45,4 +45,15 @@ public class UsersController : ControllerBase
             return NotFound();
         return Ok(user);
     }
+    
+    [HttpGet("login/{pseudo}")]
+    public async Task<IActionResult> LoginWithPseudo(string pseudo)
+    {
+        var user = await _usersService.LoginWithPseudo(pseudo);
+        if (user == null)
+            return NotFound($"Aucun utilisateur trouvé avec le pseudo '{pseudo}'");
+
+        return Ok(user);
+    }
+
 }

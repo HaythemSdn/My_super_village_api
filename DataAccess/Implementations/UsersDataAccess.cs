@@ -25,4 +25,10 @@ public class UsersDataAccess :IUsersDataAccess
     {
         return await _myDbContext.Users.FindAsync(id);
     }
+    public async Task<UserDAO?> GetUserByPseudo(string pseudo)
+    {
+        return await _myDbContext.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
+    }
+
+
 }

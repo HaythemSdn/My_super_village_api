@@ -8,4 +8,6 @@ public interface IUserService
     Task CreateUser(CreateUserRequest user);
     Task<List<UserDTO>> GetAllUsers();
     Task<UserDTO?> GetUserById(Guid id);
+    Task<UserWithCollectionsDTO?> LoginWithPseudo(string pseudo);
+
 }
