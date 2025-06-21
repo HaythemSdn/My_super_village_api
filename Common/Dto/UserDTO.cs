@@ -21,3 +21,13 @@ public static class UserDTOExtensions
     }
     
 }
+
+public class UserWithCollectionsDTO
+{
+    public Guid Id { get; set; }
+    public string Pseudo { get; set; } = null!;
+    public DateTime LastUpdatedAt { get; set; }
+
+    public ICollection<UserBuildingDTO> Buildings { get; set; } = new List<UserBuildingDTO>();
+    public ICollection<UserResourceDTO> Resources { get; set; } = new List<UserResourceDTO>();
+}
