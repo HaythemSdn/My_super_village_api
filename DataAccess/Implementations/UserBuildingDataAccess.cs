@@ -19,4 +19,16 @@ public class UserBuildingDataAccess : IUserBuildingDataAccess
             .Where(b => b.UserId == userId)
             .ToListAsync();
     }
+
+    public async Task<UserBuildingDAO?> GetBuildingById(Guid buildingId)
+    {
+        return await _context.UserBuildings
+            .FirstOrDefaultAsync(b => b.Id == buildingId);
+    }
+
+    public async Task UpdateBuilding(UserBuildingDAO building)
+    {
+        _context.UserBuildings.Update(building);
+        await _context.SaveChangesAsync();
+    }
 }

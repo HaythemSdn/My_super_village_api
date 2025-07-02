@@ -12,11 +12,13 @@ namespace My_super_village_api.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUserService _usersService;
+    private readonly IUserConstructionService _constructionService;
 
-    public UsersController(IUserService UserService) {
-        _usersService = UserService;
+    public UsersController(IUserService userService, IUserConstructionService constructionService) {
+        _usersService = userService;
+        _constructionService = constructionService;
     }
-    [HttpPost]
+    [HttpPost("signup")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> CreateUser([FromBody] CreateUserRequest request) {
@@ -46,7 +48,9 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
     
-    [HttpGet("login/{pseudo}")]
+    [HttpGet("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> LoginWithPseudo(string pseudo)
     {
         var user = await _usersService.LoginWithPseudo(pseudo);
@@ -56,4 +60,11 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
 
+    [HttpGet("{userId}/constructions")]
+    [ProducesResponseType(typeof(ConstructionStatusDTO), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ConstructionStatusDTO>> GetConstructionStatus(Guid userId)
+    {
+        var status = await _constructionService.GetConstructionStatus(userId);
+        return Ok(status);
+    }
 }

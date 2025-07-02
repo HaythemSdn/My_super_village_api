@@ -6,6 +6,7 @@ public class MyDbContext :DbContext
     public DbSet<UserDAO> Users { get; set; }
     public DbSet<UserBuildingDAO> UserBuildings { get; set; }
     public DbSet<UserResourceDAO> UserResources { get; set; }
+    public DbSet<UserConstructionDAO> UserConstructions { get; set; }
 
     public MyDbContext(DbContextOptions<MyDbContext> options) :
         base(options){}
@@ -47,6 +48,29 @@ public class MyDbContext :DbContext
             .HasOne(r => r.User)
             .WithMany(u => u.Resources)
             .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // === Construction ===
+        var constructionBuilder = modelBuilder.Entity<UserConstructionDAO>();
+        constructionBuilder.ToTable("UserConstructions");
+        constructionBuilder.HasKey(c => c.Id);
+        constructionBuilder.Property(c => c.Id).HasColumnName("id").HasColumnType("uuid");
+        constructionBuilder.Property(c => c.UserId).HasColumnName("user_id").HasColumnType("uuid");
+        constructionBuilder.Property(c => c.BuildingId).HasColumnName("building_id").HasColumnType("uuid");
+        constructionBuilder.Property(c => c.StartTime).HasColumnName("start_time");
+        constructionBuilder.Property(c => c.EndTime).HasColumnName("end_time");
+        constructionBuilder.Property(c => c.IsCompleted).HasColumnName("is_completed");
+
+        constructionBuilder
+            .HasOne(c => c.User)
+            .WithMany()
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        constructionBuilder
+            .HasOne(c => c.Building)
+            .WithMany()
+            .HasForeignKey(c => c.BuildingId)
             .OnDelete(DeleteBehavior.Cascade);
     }
     

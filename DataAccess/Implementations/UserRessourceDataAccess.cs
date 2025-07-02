@@ -19,4 +19,10 @@ public class UserRessourceDataAccess : IUserRessourceDataAccess
             .Where(r => r.UserId == userId)
             .ToListAsync();
     }
+
+    public async Task UpdateResource(UserResourceDAO resource)
+    {
+        _context.UserResources.Update(resource);
+        await _context.SaveChangesAsync();
+    }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250622093419_RemoveLastUpdatedFieldAtUserLevelFromBuildingAndResources")]
+    partial class RemoveLastUpdatedFieldAtUserLevelFromBuildingAndResources
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,42 +58,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserBuildings", (string)null);
-                });
-
-            modelBuilder.Entity("Common.Dao.UserConstructionDAO", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("BuildingId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("building_id");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("end_time");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_completed");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("start_time");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BuildingId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserConstructions", (string)null);
                 });
 
             modelBuilder.Entity("Common.Dao.UserDAO", b =>
@@ -149,25 +116,6 @@ namespace DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Common.Dao.UserConstructionDAO", b =>
-                {
-                    b.HasOne("Common.Dao.UserBuildingDAO", "Building")
-                        .WithMany()
-                        .HasForeignKey("BuildingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Common.Dao.UserDAO", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Building");
 
                     b.Navigation("User");
                 });

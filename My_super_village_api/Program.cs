@@ -28,6 +28,8 @@ public class Program
             builder.Services.AddTransient<IUserRessourceService, UserRessourceService>();
             builder.Services.AddTransient<IUserBuildingDataAccess, UserBuildingDataAccess>();
             builder.Services.AddTransient<IUserBuildingService, UserBuildingService>();
+            builder.Services.AddTransient<IUserConstructionDataAccess, UserConstructionDataAccess>();
+            builder.Services.AddTransient<IUserConstructionService, UserConstructionService>();
             
             //Add Controllers to the container.
             builder.Services.AddControllers();
