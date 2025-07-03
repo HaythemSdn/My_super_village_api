@@ -131,4 +131,28 @@ public class UserService:IUserService
             Resources = resources
         };
     }
+
+    public async Task<List<LeaderboardEntryDTO>> GetLeaderboard()
+    {
+        var users = await _userDataAccess.GetAllUsers();
+        
+        var leaderboard = new List<LeaderboardEntryDTO>();
+        
+        foreach (var user in users)
+        {
+            var buildings = await _buildingService.GetBuildingsByUserId(user.Id);
+            
+            var score = buildings.Sum(b => (int)Math.Pow(b.Level, 2));
+            
+            leaderboard.Add(new LeaderboardEntryDTO
+            {
+                Id = user.Id,
+                Pseudo = user.Pseudo,
+                Score = score,
+                LastUpdatedAt = user.LastUpdatedAt
+            });
+        }
+        
+        return leaderboard.OrderByDescending(l => l.Score).ToList();
+    }
 }

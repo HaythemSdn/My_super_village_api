@@ -67,4 +67,12 @@ public class UsersController : ControllerBase
         var status = await _constructionService.GetConstructionStatus(userId);
         return Ok(status);
     }
+
+    [HttpGet("leaderboard")]
+    [ProducesResponseType(typeof(List<LeaderboardEntryDTO>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<LeaderboardEntryDTO>>> GetLeaderboard()
+    {
+        var leaderboard = await _usersService.GetLeaderboard();
+        return Ok(leaderboard);
+    }
 }
