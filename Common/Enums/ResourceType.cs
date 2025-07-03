@@ -4,5 +4,6 @@ public enum ResourceType
 {
     Bois,     
     Fer,      
-    Pierre    
+    Pierre,
+    Nourriture
 }

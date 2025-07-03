@@ -15,4 +15,5 @@ public class UserBuildingDAO
     public int UpgradeCostBois { get; set; }
     public int UpgradeCostFer { get; set; }
     public int UpgradeCostPierre { get; set; }
+    public int UpgradeCostNourriture { get; set; }
 }

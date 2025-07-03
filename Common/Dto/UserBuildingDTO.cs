@@ -10,6 +10,7 @@ public class UserBuildingDTO
     public int UpgradeCostBois { get; set; }
     public int UpgradeCostFer { get; set; }
     public int UpgradeCostPierre { get; set; }
+    public int UpgradeCostNourriture { get; set; }
 }
 
 public static class UserBuildingsDTOExtensions
@@ -23,7 +24,8 @@ public static class UserBuildingsDTOExtensions
             Level = userBuildingDAO.Level,
             UpgradeCostBois = userBuildingDAO.UpgradeCostBois,
             UpgradeCostFer = userBuildingDAO.UpgradeCostFer,
-            UpgradeCostPierre = userBuildingDAO.UpgradeCostPierre
+            UpgradeCostPierre = userBuildingDAO.UpgradeCostPierre,
+            UpgradeCostNourriture = userBuildingDAO.UpgradeCostNourriture
         };
     }
 }

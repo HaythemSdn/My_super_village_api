@@ -149,11 +149,13 @@ public class UserConstructionService : IUserConstructionService
         
         var costBois = (int)Math.Pow(building.Level + 1, 2) * 50;   
         var costFer = (int)Math.Pow(building.Level + 1, 2) * 30;    
-        var costPierre = (int)Math.Pow(building.Level + 1, 2) * 40; 
+        var costPierre = (int)Math.Pow(building.Level + 1, 2) * 40;
+        var costNourriture = (int)Math.Pow(building.Level + 1, 2) * 20; 
 
         var boisResource = userResources.FirstOrDefault(r => r.Type == ResourceType.Bois);
         var ferResource = userResources.FirstOrDefault(r => r.Type == ResourceType.Fer);
         var pierreResource = userResources.FirstOrDefault(r => r.Type == ResourceType.Pierre);
+        var nourritureResource = userResources.FirstOrDefault(r => r.Type == ResourceType.Nourriture);
 
         if (boisResource == null || boisResource.Quantity < costBois)
             throw new BusinessRuleException($"Pas assez de bois. Requis: {costBois}, Disponible: {boisResource?.Quantity ?? 0}");
@@ -163,17 +165,23 @@ public class UserConstructionService : IUserConstructionService
         
         if (pierreResource == null || pierreResource.Quantity < costPierre)
             throw new BusinessRuleException($"Pas assez de pierre. Requis: {costPierre}, Disponible: {pierreResource?.Quantity ?? 0}");
+        
+        if (nourritureResource == null || nourritureResource.Quantity < costNourriture)
+            throw new BusinessRuleException($"Pas assez de nourriture. Requis: {costNourriture}, Disponible: {nourritureResource?.Quantity ?? 0}");
 
         boisResource.Quantity -= costBois;
         ferResource.Quantity -= costFer;
         pierreResource.Quantity -= costPierre;
+        nourritureResource.Quantity -= costNourriture;
 
         building.UpgradeCostBois = (int)Math.Pow(building.Level + 2, 2) * 50;  
         building.UpgradeCostFer = (int)Math.Pow(building.Level + 2, 2) * 30;
         building.UpgradeCostPierre = (int)Math.Pow(building.Level + 2, 2) * 40;
+        building.UpgradeCostNourriture = (int)Math.Pow(building.Level + 2, 2) * 20;
 
         await _resourceDataAccess.UpdateResource(boisResource);
         await _resourceDataAccess.UpdateResource(ferResource);
         await _resourceDataAccess.UpdateResource(pierreResource);
+        await _resourceDataAccess.UpdateResource(nourritureResource);
     }
 }

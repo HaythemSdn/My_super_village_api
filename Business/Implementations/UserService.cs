@@ -71,7 +71,8 @@ public class UserService:IUserService
                 Level = 1,
                 UpgradeCostBois = 100,
                 UpgradeCostFer = 60,
-                UpgradeCostPierre = 80
+                UpgradeCostPierre = 80,
+                UpgradeCostNourriture = 50
             },
             new() { 
                 Id = Guid.NewGuid(), 
@@ -79,7 +80,8 @@ public class UserService:IUserService
                 Level = 1,
                 UpgradeCostBois = 100,
                 UpgradeCostFer = 60,
-                UpgradeCostPierre = 80
+                UpgradeCostPierre = 80,
+                UpgradeCostNourriture = 50
             },
             new() { 
                 Id = Guid.NewGuid(), 
@@ -87,7 +89,8 @@ public class UserService:IUserService
                 Level = 1,
                 UpgradeCostBois = 100,
                 UpgradeCostFer = 60,
-                UpgradeCostPierre = 80
+                UpgradeCostPierre = 80,
+                UpgradeCostNourriture = 50
             },
             new() { 
                 Id = Guid.NewGuid(), 
@@ -95,7 +98,17 @@ public class UserService:IUserService
                 Level = 1,
                 UpgradeCostBois = 100,
                 UpgradeCostFer = 60,
-                UpgradeCostPierre = 80
+                UpgradeCostPierre = 80,
+                UpgradeCostNourriture = 50
+            },
+            new() { 
+                Id = Guid.NewGuid(), 
+                Type = BuildingType.Ferme, 
+                Level = 1,
+                UpgradeCostBois = 120,
+                UpgradeCostFer = 80,
+                UpgradeCostPierre = 60,
+                UpgradeCostNourriture = 40
             }
         };
     }
@@ -106,7 +119,8 @@ public class UserService:IUserService
         {
             new() { Id = Guid.NewGuid(), Type = ResourceType.Bois, Quantity = 500 },
             new() { Id = Guid.NewGuid(), Type = ResourceType.Fer, Quantity = 500 },
-            new() { Id = Guid.NewGuid(), Type = ResourceType.Pierre, Quantity = 500 }
+            new() { Id = Guid.NewGuid(), Type = ResourceType.Pierre, Quantity = 500 },
+            new() { Id = Guid.NewGuid(), Type = ResourceType.Nourriture, Quantity = 500 }
         };
     }
     

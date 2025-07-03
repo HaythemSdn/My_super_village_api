@@ -59,6 +59,7 @@ public class UserRessourceService : IUserRessourceService
             await GenerateResourceType(buildings, resources, ResourceType.Bois, BuildingType.Scierie, timeElapsed, storageLimit);
             await GenerateResourceType(buildings, resources, ResourceType.Fer, BuildingType.Mine, timeElapsed, storageLimit);
             await GenerateResourceType(buildings, resources, ResourceType.Pierre, BuildingType.Carriere, timeElapsed, storageLimit);
+            await GenerateResourceType(buildings, resources, ResourceType.Nourriture, BuildingType.Ferme, timeElapsed, storageLimit);
 
             user.LastUpdatedAt = DateTime.UtcNow;
             await _userDataAccess.UpdateUser(user);
@@ -165,6 +166,7 @@ public class UserRessourceService : IUserRessourceService
             BuildingType.Scierie => true,
             BuildingType.Mine => true,
             BuildingType.Carriere => true,
+            BuildingType.Ferme => true,
             BuildingType.Entrepot => false,
             _ => false
         };
