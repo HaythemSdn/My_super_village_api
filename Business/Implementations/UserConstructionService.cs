@@ -15,7 +15,7 @@ public class UserConstructionService : IUserConstructionService
     private readonly IUserRessourceDataAccess _resourceDataAccess;
     private readonly ILogger<UserConstructionService> _logger;
 
-    private const int BaseConstructionTimeSeconds = 30;
+    private const int BaseConstructionTimeSeconds = 5;
 
     public UserConstructionService(
         IUserConstructionDataAccess constructionDataAccess,
@@ -60,8 +60,8 @@ public class UserConstructionService : IUserConstructionService
             // Vérifier les ressources nécessaires
             await ValidateAndConsumeResources(userId, building);
 
-            // Calculer le temps de construction
-            var constructionDuration = BaseConstructionTimeSeconds * building.Level;
+            // Calculer le temps de construction (augmente avec le niveau du bâtiment ACTUEL + 1)
+            var constructionDuration = BaseConstructionTimeSeconds * (building.Level + 1);
             var startTime = DateTime.UtcNow;
             var endTime = startTime.AddSeconds(constructionDuration);
 
@@ -147,16 +147,14 @@ public class UserConstructionService : IUserConstructionService
     {
         var userResources = await _resourceDataAccess.GetResourcesByUserId(userId);
         
-        // Calculer les coûts d'amélioration (exemple: coût = niveau * 50 pour chaque ressource)
-        var costBois = building.Level * 50;
-        var costFer = building.Level * 30; 
-        var costPierre = building.Level * 40;
+        var costBois = (int)Math.Pow(building.Level + 1, 2) * 50;   
+        var costFer = (int)Math.Pow(building.Level + 1, 2) * 30;    
+        var costPierre = (int)Math.Pow(building.Level + 1, 2) * 40; 
 
         var boisResource = userResources.FirstOrDefault(r => r.Type == ResourceType.Bois);
         var ferResource = userResources.FirstOrDefault(r => r.Type == ResourceType.Fer);
         var pierreResource = userResources.FirstOrDefault(r => r.Type == ResourceType.Pierre);
 
-        // Vérifier les ressources disponibles
         if (boisResource == null || boisResource.Quantity < costBois)
             throw new BusinessRuleException($"Pas assez de bois. Requis: {costBois}, Disponible: {boisResource?.Quantity ?? 0}");
         
@@ -166,17 +164,14 @@ public class UserConstructionService : IUserConstructionService
         if (pierreResource == null || pierreResource.Quantity < costPierre)
             throw new BusinessRuleException($"Pas assez de pierre. Requis: {costPierre}, Disponible: {pierreResource?.Quantity ?? 0}");
 
-        // Consommer les ressources
         boisResource.Quantity -= costBois;
         ferResource.Quantity -= costFer;
         pierreResource.Quantity -= costPierre;
 
-        // Mettre à jour les coûts du bâtiment pour le prochain niveau
-        building.UpgradeCostBois = (building.Level + 1) * 50;
-        building.UpgradeCostFer = (building.Level + 1) * 30;
-        building.UpgradeCostPierre = (building.Level + 1) * 40;
+        building.UpgradeCostBois = (int)Math.Pow(building.Level + 2, 2) * 50;  
+        building.UpgradeCostFer = (int)Math.Pow(building.Level + 2, 2) * 30;
+        building.UpgradeCostPierre = (int)Math.Pow(building.Level + 2, 2) * 40;
 
-        // Sauvegarder les changements des ressources
         await _resourceDataAccess.UpdateResource(boisResource);
         await _resourceDataAccess.UpdateResource(ferResource);
         await _resourceDataAccess.UpdateResource(pierreResource);

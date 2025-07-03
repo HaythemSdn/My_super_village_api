@@ -9,7 +9,6 @@ namespace My_super_village_api.Controllers;
 public class UserRessourcesController : ControllerBase
 {
     private readonly IUserRessourceService _ressourceService;
-
     public UserRessourcesController(IUserRessourceService ressourceService)
     {
         _ressourceService = ressourceService;

@@ -30,5 +30,9 @@ public class UsersDataAccess :IUsersDataAccess
         return await _myDbContext.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
     }
 
-
+    public async Task UpdateUser(UserDAO user)
+    {
+        _myDbContext.Users.Update(user);
+        await _myDbContext.SaveChangesAsync();
+    }
 }
