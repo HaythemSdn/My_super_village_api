@@ -9,5 +9,5 @@ public interface IUserService
     Task<List<UserDTO>> GetAllUsers();
     Task<UserDTO?> GetUserById(Guid id);
     Task<UserWithCollectionsDTO?> LoginWithPseudo(string pseudo);
-
+    Task<List<LeaderboardEntryDTO>> GetLeaderboard();
 }
