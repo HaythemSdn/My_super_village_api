@@ -5,5 +5,6 @@ public enum BuildingType
     Scierie = 1,    // Produit du bois
     Mine = 2,       // Produit du fer
     Carriere = 3,   // Produit de la pierre
-    Entrepot = 4    // Limite de stockage
+    Entrepot = 4,   // Limite de stockage
+    Ferme = 5       // Produit de la nourriture
 }
