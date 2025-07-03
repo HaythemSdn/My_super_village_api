@@ -8,4 +8,5 @@ public interface IUsersDataAccess
     Task<List<UserDAO>> GetAllUsers();
     Task<UserDAO?> GetUserById(Guid id);
     Task<UserDAO?> GetUserByPseudo(string pseudo);
+    Task UpdateUser(UserDAO user);
 }

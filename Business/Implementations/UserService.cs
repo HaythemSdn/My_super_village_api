@@ -16,7 +16,7 @@ public class UserService:IUserService
     private readonly IUserRessourceService _ressourceService;
     private readonly ILogger<UserService> _logger;
 
-    public UserService(IUsersDataAccess userDataAccess,IUserBuildingService buildingService,IUserRessourceService ressourceService ,ILogger<UserService> logger )
+    public UserService(IUsersDataAccess userDataAccess,IUserBuildingService buildingService,IUserRessourceService ressourceService, ILogger<UserService> logger )
     {
         _userDataAccess = userDataAccess;
         _buildingService = buildingService;
@@ -26,6 +26,13 @@ public class UserService:IUserService
     public async Task CreateUser(CreateUserRequest User) {
         try {
             CheckPseudoBusinessRules(User.Pseudo);
+            
+            // Vérifier que le pseudo n'existe pas déjà
+            var existingUser = await _userDataAccess.GetUserByPseudo(User.Pseudo);
+            if (existingUser != null) {
+                throw new BusinessRuleException($"Un utilisateur avec le pseudo '{User.Pseudo}' existe déjà");
+            }
+            
             await _userDataAccess.CreateUser(new UserDAO {
                 Id = Guid.NewGuid(),
                 Pseudo = User.Pseudo,
@@ -34,7 +41,7 @@ public class UserService:IUserService
                 LastUpdatedAt = DateTime.UtcNow
             });
         } catch (Exception ex) {
-            _logger.LogError(ex, "Erreur lors de la creation du jeu");
+            _logger.LogError(ex, "Erreur lors de la creation de l'utilisateur");
             throw;
         }
     }
@@ -58,10 +65,38 @@ public class UserService:IUserService
     {
         return new List<UserBuildingDAO>
         {
-            new() { Id = Guid.NewGuid(), Type = BuildingType.Scierie, Level = 1 },
-            new() { Id = Guid.NewGuid(), Type = BuildingType.Mine, Level = 1 },
-            new() { Id = Guid.NewGuid(), Type = BuildingType.Carriere, Level = 1 },
-            new() { Id = Guid.NewGuid(), Type = BuildingType.Entrepot, Level = 1 }
+            new() { 
+                Id = Guid.NewGuid(), 
+                Type = BuildingType.Scierie, 
+                Level = 1,
+                UpgradeCostBois = 100,
+                UpgradeCostFer = 60,
+                UpgradeCostPierre = 80
+            },
+            new() { 
+                Id = Guid.NewGuid(), 
+                Type = BuildingType.Mine, 
+                Level = 1,
+                UpgradeCostBois = 100,
+                UpgradeCostFer = 60,
+                UpgradeCostPierre = 80
+            },
+            new() { 
+                Id = Guid.NewGuid(), 
+                Type = BuildingType.Carriere, 
+                Level = 1,
+                UpgradeCostBois = 100,
+                UpgradeCostFer = 60,
+                UpgradeCostPierre = 80
+            },
+            new() { 
+                Id = Guid.NewGuid(), 
+                Type = BuildingType.Entrepot, 
+                Level = 1,
+                UpgradeCostBois = 100,
+                UpgradeCostFer = 60,
+                UpgradeCostPierre = 80
+            }
         };
     }
 
@@ -69,9 +104,9 @@ public class UserService:IUserService
     {
         return new List<UserResourceDAO>
         {
-            new() { Id = Guid.NewGuid(), Type = ResourceType.Bois, Quantity = 100 },
-            new() { Id = Guid.NewGuid(), Type = ResourceType.Fer, Quantity = 100 },
-            new() { Id = Guid.NewGuid(), Type = ResourceType.Pierre, Quantity = 100 }
+            new() { Id = Guid.NewGuid(), Type = ResourceType.Bois, Quantity = 500 },
+            new() { Id = Guid.NewGuid(), Type = ResourceType.Fer, Quantity = 500 },
+            new() { Id = Guid.NewGuid(), Type = ResourceType.Pierre, Quantity = 500 }
         };
     }
     
@@ -80,15 +115,18 @@ public class UserService:IUserService
         var user = await _userDataAccess.GetUserByPseudo(pseudo);
         if (user == null)
             return null;
+        await _ressourceService.CalculateAndApplyPassiveGeneration(user.Id);
 
         var buildings = await _buildingService.GetBuildingsByUserId(user.Id);
         var resources = await _ressourceService.GetResourcesByUserId(user.Id);
+
+        var updatedUser = await _userDataAccess.GetUserById(user.Id);
 
         return new UserWithCollectionsDTO
         {
             Id = user.Id,
             Pseudo = user.Pseudo,
-            LastUpdatedAt = user.LastUpdatedAt,
+            LastUpdatedAt = updatedUser?.LastUpdatedAt ?? user.LastUpdatedAt,
             Buildings = buildings,
             Resources = resources
         };

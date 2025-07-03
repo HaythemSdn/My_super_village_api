@@ -25,7 +25,12 @@ public class Program
             builder.Services.AddTransient<IUsersDataAccess, UsersDataAccess>();
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IUserRessourceDataAccess, UserRessourceDataAccess>();
-            builder.Services.AddTransient<IUserRessourceService, UserRessourceService>();
+            builder.Services.AddTransient<IUserRessourceService>(provider =>
+                new UserRessourceService(
+                    provider.GetRequiredService<IUserRessourceDataAccess>(),
+                    provider.GetRequiredService<IUsersDataAccess>(),
+                    provider.GetRequiredService<IUserBuildingDataAccess>(),
+                    provider.GetRequiredService<ILogger<UserRessourceService>>()));
             builder.Services.AddTransient<IUserBuildingDataAccess, UserBuildingDataAccess>();
             builder.Services.AddTransient<IUserBuildingService, UserBuildingService>();
             builder.Services.AddTransient<IUserConstructionDataAccess, UserConstructionDataAccess>();
